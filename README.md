@@ -23,7 +23,6 @@ Este chatbot está pensado como:
 
 ## ⚙️ Arquitectura general
 
-\
 chatbot-flotante/
 ├── server/
 │   └── server.js               # Lógica del backend y API
@@ -34,7 +33,6 @@ chatbot-flotante/
 ├── LICENSE                     # Licencia MIT - Mauricio Belforte
 ├── README.md                   # Documentación del proyecto
 └── package.json                # Metadata y dependencias
-\
 
 ## 📄 Licencia
 
