@@ -1,0 +1,25 @@
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./styles.css">
+
+  <title>Mi Web con Chatbot</title>
+  
+</head>
+<body>
+  <button class="chat-icon" id="chat-icon">💬</button>
+
+  <div class="chat-container" id="chat-container">
+    <div class="chat-container__listado-de-mensajes" id="mensajes"></div>
+    <div class="chat-container__usuario" id="usuario-input">
+      <input class="chat-container__usuario__input" type="text" id="mensaje" placeholder="Escribí tu pregunta..." />
+      <button class="chat-container__usuario__button" id="enviar-mensaje">Enviar</button>
+    </div>
+  </div>
+
+  <script src="/script/chatbot.js"></script>
+</body>
+</html>
