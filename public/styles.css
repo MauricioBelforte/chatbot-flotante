@@ -31,7 +31,7 @@
   position: fixed;
   bottom: 90px;
   right: 20px;
-  width: 300px;
+  width: 400px;
   height: 400px;
   background: white;
   border: 1px solid #ccc;
@@ -60,18 +60,18 @@
 
 }
 
-.chat-container__usuario {
+.chat-container__input-area {
   display: flex;
   padding: 10px;
   border-top: 1px solid #ccc;
 }
 
-.chat-container__usuario__input {
+.chat-container__input {
   flex: 1;
   padding: 8px;
 }
 
-.chat-container__usuario__button {
+.chat-container__button {
   padding: 8px;
 }
 
@@ -89,7 +89,7 @@
   line-height: 1.4;
 }
 
-.mensaje-usuario {
+.mensaje--usuario {
 
   align-self: flex-end;
   text-align: right;
@@ -97,7 +97,7 @@
   flex-direction: row-reverse;
 }
 
-.mensaje-bot {
+.mensaje--bot {
 
   align-self: flex-start;
   text-align: left;
@@ -125,4 +125,9 @@
 
 .vineta-icono-robot {
   font-size: 24px;
+}
+
+.vineta-texto-robot br {
+  margin-bottom: 0.5em;
+  display: block;
 }
