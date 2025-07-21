@@ -10,6 +10,9 @@ const mensajesListado = document.getElementById("mensajes");
 
 /// Escuchando el click en el icono
 chatIcon.addEventListener("click", () => {
+  /* Esconde las animaciones del hover */
+
+  chatIcon.classList.toggle("opened");
   /* Si el elemento ya tiene la clase "visible", la elimina, si no la tiene, la agrega. */
   chatContainer.classList.toggle("visible");
   mostrarMensajeBienvenida();
@@ -47,16 +50,29 @@ async function enviarMensaje() {
   agregarMensaje("usuario", mensajeDelUsuario);
   mensajeInput.value = "";
 
-  const res = await fetch("/api/chat", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message: mensajeDelUsuario }),
-  });
+  // ⏳ Mostrar animación mientras llega la respuesta
+  const mensajeLoading = mostrarAnimacionRespondiendo();
 
-  const data = await res.json();
-  const mensajeFinal = formatearRespuestaBot(data.reply);
+  try {
+    // Peticion a mi api server.js
+    const res = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: mensajeDelUsuario }),
+    });
 
-  agregarMensaje("bot", mensajeFinal, true); // si tu función renderiza con HTML
+    const data = await res.json();
+
+    // 💥 Eliminar animación antes de mostrar la respuesta real
+    mensajeLoading.remove();
+
+    const mensajeFinal = formatearRespuestaBot(data.reply);
+    agregarMensaje("bot", mensajeFinal, true); // Si hay HTML
+  } catch (error) {
+    mensajeLoading.remove();
+    agregarMensaje("bot", "Lo siento, hubo un error al procesar la respuesta.", false);
+    console.error("Error en la petición:", error);
+  }
 }
 
 function formatearRespuestaBot(textoPlano) {
@@ -64,7 +80,10 @@ function formatearRespuestaBot(textoPlano) {
   const limpio = textoPlano.replace(/<([^>]+)>/g, '$1');
 
   // Convierte URLs en enlaces HTML
-  const conLinks = limpio.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+  const conLinks = limpio.replace(
+    /(https?:\/\/[^\s<>()\[\]{}"']+)/g,
+    '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
+  );
   console.log(conLinks)
   // Convierte saltos de línea \n en <br>
   const conSaltos = conLinks.replace(/\n/g, '<br>');
@@ -119,3 +138,37 @@ function crearIcono(icon, clase) {
   return icono
 
 }
+
+
+function mostrarAnimacionRespondiendo() {
+  const contenedor = document.createElement("div");
+  contenedor.classList.add(
+    "chat-container__listado-de-mensajes__mensaje",
+    "mensaje--bot",
+    "mensaje--loading"
+  );
+
+  const icono = crearIcono("🤖", "vineta-icono-robot");
+
+  const textoAnimado = document.createElement("div");
+  textoAnimado.classList.add("vineta-texto-robot", "animacion-respondiendo");
+
+  textoAnimado.innerHTML = `
+    <div class="pelotitas-rebotando">
+      <span class="pelotita"></span>
+      <span class="pelotita"></span>
+      <span class="pelotita"></span>
+    </div>
+  `;
+
+  contenedor.appendChild(icono);
+  contenedor.appendChild(textoAnimado);
+  mensajesListado.appendChild(contenedor);
+  mensajesListado.scrollTop = mensajesListado.scrollHeight;
+
+  return contenedor;
+}
+
+document.getElementById("chat-icon").addEventListener("click", () => {
+
+});

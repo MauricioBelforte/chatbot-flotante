@@ -28,9 +28,10 @@ app.post("/api/chat", async (req, res) => {
     }
 
     // Cargamos sobremi.json
-    const keywords = ["hola", "datos", "edad", "años", "vive", "ciudad", "Belforte", "ubicacion", "dedica", "trabaja", "trabajo", "creo",
-        "mauricio", "quién sos", "quién es", "sobre vos", "sobre él",
-        "quién es mauricio", "perfil de mauricio", "contacto",
+    const keywords = ["hola", "datos", "edad", "años", "vive", "ciudad", "Belforte", "ubicacion",
+        "ciudad", "pais", "provincia", "dedica", "trabaja", "trabajo", "creo", "hacer", "sabe", "hace", "bueno",
+        "mauricio", "quién sos", "quién es", "sobre vos", "sobre él", "profesion",
+        "quién es mauricio", "perfil de mauricio", "contacto", "contactar",
         "email", "linkedin", "github"];
 
     let perfil = {};
@@ -49,28 +50,32 @@ app.post("/api/chat", async (req, res) => {
     // Sobre trabajos
     if (msg.includes("trabajo") || msg.includes("proyecto")) {
         contexto = trabajos.map(t => `- ${t.titulo}: ${t.descripcion}`).join("\n");
-        console.log(contexto);
+        /* console.log(contexto); */
         // Sobre tecnologías
     } else if (msg.includes("tecnolog")) {
         const techs = [...new Set(trabajos.flatMap(t => t.tecnologias))];
         contexto = `Tecnologías usadas por Mauricio Belforte: ${techs.join(", ")}`;
-        console.log(contexto);
+        /* console.log(contexto); */
 
         // Sobre Mauricio (nombre, experiencia, contacto, etc.)
     } else if (keywords.some(k => msg.toLowerCase().includes(k))) {
         contexto = `
-        Nombre: ${perfil.nombre}
+        Nombre y Apellido: ${perfil.nombre}
         Edad: ${perfil.edad}
-        Ubicación: ${perfil.ubicacion}
+        Ubicación de ciudad, provincia y Pais: ${perfil.ubicacion}
         Profesión: ${perfil.profesion}
-        Sobre mí: ${perfil.descripcion}
-        Tecnologías: ${perfil.tecnologias.join(", ")}
+        Sobre Mauricio Belforte: ${perfil.descripcion}
+        Tecnologías que sabe utilizar: ${perfil.tecnologias.join(", ")}
         Email: ${perfil.email}
         LinkedIn: ${perfil.linkedin}
         GitHub: ${perfil.github}
             `;
-        console.log(contexto);
+        /* console.log(contexto); */
+    } if (msg.includes("telefono") || msg.includes("celular")) {
+        contexto = `Su numero de celular es 221-3030341 (Argentina)`
+
     }
+
     else {
         const coincidencia = trabajos.find(t => msg.includes(t.titulo.toLowerCase()));
         if (coincidencia) {
@@ -81,8 +86,9 @@ app.post("/api/chat", async (req, res) => {
     // Construimos el system prompt dinámicamente
     const systemPrompt = `
 Respondé en menos de 100 caracteres, en español y con claridad.
- Sos un asistente virtual que brinda información precisa a posibles clientes, exclusivamente relacionada al Desarrollador Web Mauricio Belforte. Usá tercera persona y tono informativo. No te atribuyes la información. 
- Usá puntos y aparte con saltos de linea \n para separar frases en distintas líneas. Las respuestas deben facilitar la lectura.
+ Sos un asistente virtual que brinda información precisa en tercera persona a posibles clientes, exclusivamente relacionada al Desarrollador Web Mauricio Belforte. Usá tercera persona y tono informativo. No te atribuyes la información. 
+ Usá puntos y aparte con saltos de linea \n para separar frases en distintas líneas. Las respuestas deben facilitar la lectura. 
+ Si no encontras informacion en el contexto que responda el mensaje del usuario, responde solo con la siguiente frase: “No me entrenaron para responder ese tipo de preguntas”.
 
 `;
 
