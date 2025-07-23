@@ -242,7 +242,7 @@ async function obtenerEstadoAPIKey() {
 async function consultarModeloConOpenRouter(promptSistema, promptUsuario) {
 
     const primerProveedor = proveedores.openrouter
-    const primerModelo = modelosPorProveedor.openrouter[40];
+    const primerModelo = modelosPorProveedor.openrouter[0];
 
     /*Pido los datos al modelo con el fetch(url,objeto) */
     const response = await fetch(primerProveedor.endpoint, {
@@ -279,14 +279,14 @@ async function consultarModeloConOpenRouter(promptSistema, promptUsuario) {
 async function probandoSegundoModelo(promptSistema, promptUsuario) {
     /* const segundoModelo = modelos[1]; */
 
-    const segundoProveedor = proveedores.together;
-    const primerModelo = modelosPorProveedor.together[0];
+    const segundoProveedor = proveedores.groq;
+    const primerModelo = modelosPorProveedor.groq[0];
 
 
     const response = await fetch(segundoProveedor.endpoint, {
         method: "POST",
         headers: {
-            Authorization: `Bearer ${process.env.TOGETHER_API_KEY}`,
+            Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
             "Content-Type": "application/json",
             "HTTP-Referer": "http://localhost:3000",
             "X-Title": "Mi Sitio Web"
@@ -317,23 +317,29 @@ async function probandoSegundoModelo(promptSistema, promptUsuario) {
 }
 
 async function probandoTercerModelo(promptSistema, promptUsuario) {
-    const tercerModelo = modelos[2];
+
+
+    /* const tercerModelo = modelos[2]; */
+
+    const tercerProveedor = proveedores.together;
+    const primerModelo = modelosPorProveedor.together[0];
+
     if (!tercerModelo) return "No me entrenaron para responder ese tipo de preguntas.";
 
     console.log("→ Usando tercer modelo de respaldo:", tercerModelo);
 
 
 
-    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+    const response = await fetch(tercerProveedor, {
         method: "POST",
         headers: {
-            Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+            Authorization: `Bearer ${process.env.TOGETHER_API_KEY}`,
             "Content-Type": "application/json",
             "HTTP-Referer": "http://localhost:3000",
             "X-Title": "Mi Sitio Web"
         },
         body: JSON.stringify({
-            model: tercerModelo,
+            model: primerModelo,
             messages: [
                 { role: "system", content: promptSistema },
                 { role: "user", content: promptUsuario }
