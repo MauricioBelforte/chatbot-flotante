@@ -84,10 +84,10 @@ function formatearRespuestaBot(textoPlano) {
     /(https?:\/\/[^\s<>()\[\]{}"']+)/g,
     '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
   );
-  console.log(conLinks)
+  /* console.log(conLinks) */
   // Convierte saltos de línea \n en <br>
   const conSaltos = conLinks.replace(/\n/g, '<br>');
-  console.log(conSaltos)
+  /* console.log(conSaltos) */
 
   return conSaltos;
 }
