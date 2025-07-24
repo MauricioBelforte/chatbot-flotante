@@ -24,7 +24,7 @@ app.use("/script", express.static(path.join(__dirname, "../script")));
 app.use(express.json());
 
 app.post("/api/chat", async (req, res) => {
-    const userMessage = req.body.message;
+    const mensajeDelUsuario = req.body.message;
 
     // Cargamos trabajos.json
     let trabajos = [];
@@ -66,21 +66,21 @@ app.post("/api/chat", async (req, res) => {
     // Construimos un contexto a partir del mensaje del usuario
     let contexto = "";
 
-    const mensaje = userMessage.toLowerCase();
+    const mensajeDelUsuarioEnMinuscula = mensajeDelUsuario.toLowerCase();
 
     // Sobre trabajos
-    if (mensaje.includes("trabajo") || mensaje.includes("proyecto")) {
+    if (mensajeDelUsuarioEnMinuscula.includes("trabajo") || mensajeDelUsuarioEnMinuscula.includes("proyecto")) {
         /*map crea un arreglo de strings, y a ese arreglo se convierte en un solo string con join */
         contexto = trabajos.map(trabajo => `- ${trabajo.titulo}: ${trabajo.descripcion}`).join("\n");
         /* console.log(contexto); */
         // Sobre tecnologías
-    } else if (mensaje.includes("tecnolog")) {
+    } else if (mensajeDelUsuarioEnMinuscula.includes("tecnolog")) {
         const techs = [...new Set(trabajos.flatMap(t => t.tecnologias))];
         contexto = `Tecnologías usadas por Mauricio Belforte: ${techs.join(", ")}`;
         /* console.log(contexto); */
 
         // Sobre Mauricio (nombre, experiencia, contacto, etc.)
-    } else if (keywords.some(palabra => mensaje.toLowerCase().includes(palabra))) {
+    } else if (keywords.some(palabra => mensajeDelUsuarioEnMinuscula.toLowerCase().includes(palabra))) {
         contexto = `
         Nombre y Apellido: ${perfil.nombre}
         Edad: ${perfil.edad}
@@ -93,10 +93,10 @@ app.post("/api/chat", async (req, res) => {
         GitHub: ${perfil.github}
             `;
         /* console.log(contexto); */
-    } else if (mensaje.includes("telefono") || mensaje.includes("celular")) {
+    } else if (mensajeDelUsuarioEnMinuscula.includes("telefono") || mensajeDelUsuarioEnMinuscula.includes("celular")) {
         contexto = `Su numero de celular es 221-3030341 (Argentina)`
 
-    } else if (keywordsFormacion.some(k => mensaje.toLowerCase().includes(k))) {
+    } else if (keywordsFormacion.some(k => mensajeDelUsuarioEnMinuscula.toLowerCase().includes(k))) {
         contexto = `
     Formación Académica:
     • Estudio Analista Programador Universitario en la UNLP - Pero actualmente se encuentra finalizando sus estudios en la UNPSJB (En curso)
@@ -122,7 +122,7 @@ app.post("/api/chat", async (req, res) => {
     • Taller de Corel Draw - UNLP
     `;
         /* console.log(contexto); */
-    } else if ((objetoTrabajo = trabajos.find(trabajo => mensaje.includes(trabajo.titulo.toLowerCase())))) {
+    } else if ((objetoTrabajo = trabajos.find(trabajo => mensajeDelUsuarioEnMinuscula.includes(trabajo.titulo.toLowerCase())))) {
         contexto = `Trabajo: ${objetoTrabajo.titulo}\nTecnologías: ${objetoTrabajo.tecnologias.join(", ")}\nDescripción: ${objetoTrabajo.descripcion}`;
 
     } else {
@@ -166,18 +166,18 @@ Respondé en menos de 100 caracteres, en español y con claridad.
 
 `;
 
-    const generarPromptUsuario = (contexto, userMessage) =>
+    const generarPromptUsuario = (contexto, mensajeDelUsuario) =>
         `
 Contexto:\n${contexto}
 
 Si no encontrás una respuesta a la pregunta del usuario, generá un resumen breve del contexto, manteniendo la claridad y el tono informativo.
 
-Utilizando la parte útil del contexto, generá una respuesta en tercera persona que responda solo y únicamente a la siguiente pregunta del usuario: “${userMessage}”.
+Utilizando la parte útil del contexto, generá una respuesta en tercera persona que responda solo y únicamente a la siguiente pregunta del usuario: “${mensajeDelUsuario}”.
 
 Usá puntos y aparte con saltos de línea (\\n) para facilitar la lectura. No respondas temas fuera del contexto, ni preguntas de la vida privada de nadie.
 `;
 
-    const promptUsuario = generarPromptUsuario(contexto, userMessage);
+    const promptUsuario = generarPromptUsuario(contexto, mensajeDelUsuario);
 
     // Verificás el estado actual antes de decidir el proveedor
     const estado = await chequearLimiteOpenRouter();

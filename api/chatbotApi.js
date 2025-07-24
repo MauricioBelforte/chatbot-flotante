@@ -11,7 +11,13 @@ export default async function handler(req, res) {
     }
 
     // 📝 Extraemos el mensaje enviado desde el frontend
-    const { mensaje } = req.body;
+    const mensaje = req.body.message;
+
+    // Validación de entrada se evita llamadas vacías o malformadas desde el frontend:
+    if (!mensaje || typeof mensaje !== "string" || mensaje.trim().length === 0) {
+        return res.status(400).json({ error: "Mensaje inválido o vacío" });
+    }
+
 
     // 🧠 Sistema base para el bot (puede incluir rol, contexto, tono, etc.)
     const promptSistema = "Sos un bot técnico asistente";
