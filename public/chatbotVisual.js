@@ -66,8 +66,8 @@ async function enviarMensaje() {
     // 💥 Eliminar animación antes de mostrar la respuesta real
     mensajeLoading.remove();
 
-    const mensajeFinal = formatearRespuestaBot(data.reply);
-    agregarMensaje("bot", mensajeFinal, true); // Si hay HTML
+    const mensajeDelModelo = formatearRespuestaBot(data.respuesta);
+    agregarMensaje("bot", mensajeDelModelo, true); // Si hay HTML
   } catch (error) {
     mensajeLoading.remove();
     agregarMensaje("bot", "Lo siento, hubo un error al procesar la respuesta.", false);

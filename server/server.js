@@ -6,8 +6,12 @@ import path from "path";
 import { fileURLToPath } from "url";
 import fs from "fs/promises";
 
-import { proveedores } from './proveedores.js';
-import { modelosPorProveedor } from './modelosPorProveedor.js';
+import { proveedores } from '../lib/proveedores.js';
+import { modelosPorProveedor } from '../lib/modelosPorProveedor.js';
+
+import { consultarModeloConOpenRouter, probandoSegundoModelo, probandoTercerModelo } from "../lib/consultasModelos.js";
+
+import { chequearLimiteOpenRouter } from "../lib/estadoOpenRouter.js";
 
 
 dotenv.config();
@@ -175,7 +179,14 @@ Usá puntos y aparte con saltos de línea (\\n) para facilitar la lectura. No re
 
     const promptUsuario = generarPromptUsuario(contexto, userMessage);
 
+    // Verificás el estado actual antes de decidir el proveedor
+    const estado = await chequearLimiteOpenRouter();
 
+    if (estado.degradado) {
+        // Podés usar Groq, Together o fallback técnico
+        /*Este return le responde al chatbotVisual sin la respuesta del modelo */
+        return res.json({ respuesta: "⚠️ Usando modelo alternativo por límite de uso." });
+    }
 
 
     /*     const modelos = [
@@ -184,173 +195,22 @@ Usá puntos y aparte con saltos de línea (\\n) para facilitar la lectura. No re
             "moonshotai/kimi-k2:free"                                     // respaldo 2
         ];
      */
-    const reply = await consultarModeloConOpenRouter(promptSistema, promptUsuario);
-    res.json({ reply });
+
+    // Si no está degradado, seguís con OpenRouter
+    const respuesta = await consultarModeloConOpenRouter(promptSistema, promptUsuario);
+    res.json({ respuesta });
 
     /* 
-    El objeto reply es el que llega al frontend cuando hacemos en chatbot.js un fetch('/api/chat', { method: 'POST', body: ... }) y luego lo procesás con const data = await response.json();. 
+    El objeto respuesta es el que llega al frontend cuando hacemos en chatbotVisual.js un fetch('/api/chat', { method: 'POST', body: ... }) y luego lo procesás con const data = await response.json();. 
     
     {
-        "reply": "Texto generado por el modelo según el contexto y la pregunta"
+        "respuesta": "Texto generado por el modelo según el contexto y la pregunta"
     }
     
     */
 });
 
 
-async function obtenerEstadoAPIKey() {
-    try {
-        const apiKey = process.env.OPENROUTER_API_KEY;
-        if (!apiKey) {
-            throw new Error("No se encontró OPENROUTER_API_KEY en las variables de entorno.");
-        }
-
-        const response = await fetch("https://openrouter.ai/api/v1/auth/key", {
-            method: "GET",
-            headers: {
-                Authorization: `Bearer ${apiKey}`
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error(`Error HTTP ${response.status}: ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error("❌ Error al consultar el estado de la API Key:", error.message);
-        return null;
-    }
-}
-
-(async () => {
-    const info = await obtenerEstadoAPIKey();
-    if (info && info.data) {
-        const { usage, limit, is_free_tier } = info.data;
-        console.log(`🔐 Uso actual: ${usage}/${limit}`);
-        console.log(`🆓 Plan gratuito: ${is_free_tier ? "Sí" : "No"}`);
-
-        if (usage >= limit) {
-            console.warn("⚠️  Límite excedido. Activando fallback o redireccionando a otro modelo...");
-            // Acá podés disparar lógica alternativa
-        }
-    }
-})();
-
-
-async function consultarModeloConOpenRouter(promptSistema, promptUsuario) {
-
-    const primerProveedor = proveedores.openrouter
-    const primerModelo = modelosPorProveedor.openrouter[0];
-
-    /*Pido los datos al modelo con el fetch(url,objeto) */
-    const response = await fetch(primerProveedor.endpoint, {
-        method: "POST",
-        headers: {
-            Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-            "Content-Type": "application/json",
-            "HTTP-Referer": "http://localhost:3000",
-            "X-Title": "Mi Sitio Web"
-        },
-        body: JSON.stringify({
-            model: primerModelo,
-            messages: [
-                { role: "system", content: promptSistema },
-                { role: "user", content: promptUsuario }
-            ]
-        })
-    });
-
-    const data = await response.json();
-    console.log("Respuesta cruda del modelo 1:", data);
-
-    // ❌ Si hay error o respuesta vacía, probamos el segundo modelo
-    if (data.error || !data.choices?.[0]?.message?.content) {
-        console.warn("Error o respuesta vacía. Probando primer modelo de respaldo...");
-        return await probandoSegundoModelo(promptSistema, promptUsuario);
-    }
-
-    return data.choices[0].message.content || "Lo siento, no entendí.";
-}
-
-
-
-async function probandoSegundoModelo(promptSistema, promptUsuario) {
-    /* const segundoModelo = modelos[1]; */
-
-    const segundoProveedor = proveedores.groq;
-    const primerModelo = modelosPorProveedor.groq[0];
-
-
-    const response = await fetch(segundoProveedor.endpoint, {
-        method: "POST",
-        headers: {
-            Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
-            "Content-Type": "application/json",
-            "HTTP-Referer": "http://localhost:3000",
-            "X-Title": "Mi Sitio Web"
-        },
-        body: JSON.stringify({
-            model: primerModelo,
-            messages: [
-                { role: "system", content: promptSistema },
-                { role: "user", content: promptUsuario }
-            ]
-        })
-    });
-
-    const data = await response.json();
-    console.log("Respuesta cruda del modelo 2:", data);
-    // ❌ Si hay error o respuesta vacía, probamos el tercer modelo
-    if (data.error || !data.choices?.[0]?.message?.content) {
-        console.warn("Error o respuesta vacía. Probando modelo de respaldo...");
-        return await probandoTercerModelo(promptSistema, promptUsuario, modelos);
-    }
-    return data.choices?.[0]?.message?.content || "La respuesta falló incluso en el segundo modelo alternativo.";
-
-
-
-
-
-
-}
-
-async function probandoTercerModelo(promptSistema, promptUsuario) {
-
-
-    /* const tercerModelo = modelos[2]; */
-
-    const tercerProveedor = proveedores.together;
-    const primerModelo = modelosPorProveedor.together[0];
-
-    if (!tercerModelo) return "No me entrenaron para responder ese tipo de preguntas.";
-
-    console.log("→ Usando tercer modelo de respaldo:", tercerModelo);
-
-
-
-    const response = await fetch(tercerProveedor, {
-        method: "POST",
-        headers: {
-            Authorization: `Bearer ${process.env.TOGETHER_API_KEY}`,
-            "Content-Type": "application/json",
-            "HTTP-Referer": "http://localhost:3000",
-            "X-Title": "Mi Sitio Web"
-        },
-        body: JSON.stringify({
-            model: primerModelo,
-            messages: [
-                { role: "system", content: promptSistema },
-                { role: "user", content: promptUsuario }
-            ]
-        })
-    });
-
-    const data = await response.json();
-    console.log("Respuesta cruda del modelo 3:", data);
-    return data.choices?.[0]?.message?.content || "No me entrenaron para responder ese tipo de preguntas.";
-}
 
 
 
