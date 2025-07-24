@@ -55,7 +55,7 @@ async function enviarMensaje() {
 
   try {
     // Peticion a mi api server.js
-    const res = await fetch("/api/chat", {
+    const res = await fetch("/api/chatbotApi", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message: mensajeDelUsuario }),

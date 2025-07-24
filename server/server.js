@@ -23,7 +23,7 @@ app.use(express.static(path.join(__dirname, "../public")));
 app.use("/script", express.static(path.join(__dirname, "../script")));
 app.use(express.json());
 
-app.post("/api/chat", async (req, res) => {
+app.post("/api/chatbotApi", async (req, res) => {
     const mensajeDelUsuario = req.body.message;
 
     // Cargamos trabajos.json
@@ -201,7 +201,7 @@ Usá puntos y aparte con saltos de línea (\\n) para facilitar la lectura. No re
     res.json({ respuesta });
 
     /* 
-    El objeto respuesta es el que llega al frontend cuando hacemos en chatbotVisual.js un fetch('/api/chat', { method: 'POST', body: ... }) y luego lo procesás con const data = await response.json();. 
+    El objeto respuesta es el que llega al frontend cuando hacemos en chatbotVisual.js un fetch('/api/chatbotApi', { method: 'POST', body: ... }) y luego lo procesás con const data = await response.json();. 
     
     {
         "respuesta": "Texto generado por el modelo según el contexto y la pregunta"
