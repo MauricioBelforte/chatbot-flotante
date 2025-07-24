@@ -13,9 +13,9 @@ import { consultarModeloConOpenRouter, probandoSegundoModelo, probandoTercerMode
 
 import { chequearLimiteOpenRouter } from "../lib/estadoOpenRouter.js";
 
-import { generarContexto } from "../lib/extraerContexto.js";
+import { generarContexto } from "../public/lib/extraerContexto.js";
 
-import { promptSistema, generarPromptUsuario } from "../lib/armarPrompts.js";
+import { generarPromptSistema, generarPromptUsuario } from "../public/lib/armarPrompts.js";
 
 
 dotenv.config();
@@ -28,9 +28,12 @@ app.use("/script", express.static(path.join(__dirname, "../script")));
 app.use(express.json());
 
 app.post("/api/chatbotApi", async (req, res) => {
-    const mensajeDelUsuario = req.body.message;
+    /* const mensajeDelUsuario = req.body.message;
     const contexto = await generarContexto(mensajeDelUsuario);
-    const promptUsuario = generarPromptUsuario(contexto, mensajeDelUsuario);
+    const promptUsuario = generarPromptUsuario(contexto, mensajeDelUsuario); */
+
+    const promptSistema = req.body.systemPrompt
+    const promptUsuario = req.body.userPrompt
 
     /*     // Cargamos trabajos.json
         let trabajos = [];

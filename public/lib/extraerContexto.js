@@ -1,33 +1,89 @@
-import fs from "fs/promises";
-import path from "path";
+/* import fs from "fs/promises";
+import path from "path"; */
 
 export async function generarContexto(mensajeDelUsuario) {
 
-const rutaDatos = path.join(process.cwd(), "datos");
+    /* const rutaDatos = path.join(process.cwd(), "datos");
+    
+    
+    
+    
+        // Cargamos trabajos.json
+        let trabajos = [];
+        try {
+            const trabajosRaw = await fs.readFile(path.join(rutaDatos, "trabajos.json"), "utf-8");
+            trabajos = JSON.parse(trabajosRaw);
+        } catch (err) {
+            console.error("Error al cargar trabajos.json:", err);
+        }
+    
+    
+    
+        let perfil = {};
+        try {
+           const perfilRaw = await fs.readFile(path.join(rutaDatos, "sobremi.json"), "utf-8");
+            perfil = JSON.parse(perfilRaw);
+        } catch (err) {
+            console.error("Error al cargar sobremi.json:", err);
+        }
+    
+     */
+    let trabajos = [
+        {
+            "titulo": "Toscanes",
+            "descripcion": "Landing page para grupo de inversiones inmobiliarias. Contiene menú desplegable con transiciones.",
+            "tecnologias": ["HTML", "CSS", "JavaScript", "Hostinger"],
+            "enlace_web": "https://toscanes.com.ar/",
+            "enlace_codigo": null
+        },
+        {
+            "titulo": "Radio Santa Barbara",
+            "descripcion": "Web para emisora radial 98.5Mhz de Río Turbio. Galería rotativa, audio 24hs, animaciones.",
+            "tecnologias": ["HTML", "CSS", "JavaScript", "Git", "Github"],
+            "enlace_web": "https://mauriciobelforte.github.io/radio-Santa-Barbara/",
+            "enlace_codigo": "https://github.com/MauricioBelforte/radio-Santa-Barbara"
+        },
+        {
+            "titulo": "TREX E-commerce",
+            "descripcion": "E-commerce del curso Full-Stack Node.js (Codo a Codo 4.0). Carrusel y galería de imágenes con Bootstrap.",
+            "tecnologias": ["HTML", "CSS", "JavaScript", "Bootstrap", "Git", "Github", "Vercel"],
+            "enlace_web": "https://mauriciobelforte.github.io/Proyecto-CaC-Nodejs/",
+            "enlace_codigo": "https://github.com/MauricioBelforte/Proyecto-CaC-Nodejs"
+        },
+        {
+            "titulo": "Colimbeta",
+            "descripcion": "App web para torneos de juegos de pelea. Marcador de puntajes con rotación automática de jugadores.",
+            "tecnologias": ["HTML", "CSS", "JavaScript", "Git", "Github"],
+            "enlace_web": "https://mauriciobelforte.github.io/proyecto-marcador-gana-sigue/",
+            "enlace_codigo": "https://github.com/MauricioBelforte/proyecto-marcador-gana-sigue"
+        },
+        {
+            "titulo": "Web Personal",
+            "descripcion": "Web personal para practicar cards responsivas.",
+            "tecnologias": ["HTML", "CSS", "JavaScript", "Firebase", "Node.js"],
+            "enlace_web": "https://empleoonlinecripto.web.app/",
+            "enlace_codigo": "#"
+        },
+        {
+            "titulo": "Generador de contraseñas",
+            "descripcion": "Generador de contraseñas seguras con validación de fuerza, símbolos especiales y botón de limpieza.",
+            "tecnologias": ["HTML", "CSS", "JavaScript", "Git", "Github"],
+            "enlace_web": "https://mauriciobelforte.github.io/InmersionDev-Generador-de-contrasenas-Clase1/",
+            "enlace_codigo": "https://github.com/MauricioBelforte/InmersionDev-Generador-de-contrasenas-Clase1/tree/main"
+        }
+    ];
 
-
-
-
-    // Cargamos trabajos.json
-    let trabajos = [];
-    try {
-        const trabajosRaw = await fs.readFile(path.join(rutaDatos, "trabajos.json"), "utf-8");
-        trabajos = JSON.parse(trabajosRaw);
-    } catch (err) {
-        console.error("Error al cargar trabajos.json:", err);
-    }
-
-
-
-    let perfil = {};
-    try {
-       const perfilRaw = await fs.readFile(path.join(rutaDatos, "sobremi.json"), "utf-8");
-        perfil = JSON.parse(perfilRaw);
-    } catch (err) {
-        console.error("Error al cargar sobremi.json:", err);
-    }
-
-
+    let perfil = {
+        "nombre": "se llama Mauricio Belforte",
+        "edad": "tiene 36 años",
+        "ubicacion": "actualmente vive en Trelew, Chubut, Argentina",
+        "profesion": "se desempeña como Desarrollador Web Front-End, y actualmente se esta capacitando para ser Full-Stack",
+        "descripcion": "es un excelente Desarrollador web Freelance, enfocado en tecnologías frontend. Le gusta crear sitios web funcionales y bien diseñados, con especial interés en JavaScript y Node.js.",
+        "tecnologias": ["HTML", "CSS", "JavaScript", "Bootstrap", "Node.js", "Express", "Vercel", "Git", "GitHub", "Firebase", "EJS", "JSON"],
+        "email": "mauriciobelforte@gmail.com",
+        "linkedin": "https://www.linkedin.com/in/mauriciobelforte/",
+        "github": "https://github.com/MauricioBelforte/"
+    };
 
     // Cargamos sobremi.json
     const keywords = ["hola", "datos", "edad", "años", "vive", "ciudad", "Belforte", "ubicacion", "mail",
