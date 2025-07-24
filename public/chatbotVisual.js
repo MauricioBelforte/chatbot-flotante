@@ -67,6 +67,7 @@ async function enviarMensaje() {
     mensajeLoading.remove();
 
     const mensajeDelModelo = formatearRespuestaBot(data.respuesta);
+    console.log(mensajeDelModelo)
     agregarMensaje("bot", mensajeDelModelo, true); // Si hay HTML
   } catch (error) {
     mensajeLoading.remove();
