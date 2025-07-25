@@ -13,9 +13,9 @@ import { consultarModeloConOpenRouter, probandoSegundoModelo, probandoTercerMode
 
 import { chequearLimiteOpenRouter } from "../lib/estadoOpenRouter.js";
 
-import { generarContexto } from "../public/lib/extraerContexto.js";
+import { generarContexto } from "../lib/extraerContexto.js";
 
-import { generarPromptSistema, generarPromptUsuario } from "../public/lib/armarPrompts.js";
+import { generarPromptSistema, generarPromptUsuario } from "../lib/armarPrompts.js";
 
 
 dotenv.config();

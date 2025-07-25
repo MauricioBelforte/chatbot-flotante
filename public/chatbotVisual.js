@@ -5,8 +5,8 @@ const botonEnviarMensaje = document.getElementById("enviar-mensaje");
 const mensajeInput = document.getElementById("mensaje");
 const mensajesListado = document.getElementById("mensajes");
 
-import { generarContexto } from "./lib/extraerContexto.js";
-import { generarPromptSistema, generarPromptUsuario } from "./lib/armarPrompts.js";
+import { generarContexto } from "../lib/extraerContexto.js";
+import { generarPromptSistema, generarPromptUsuario } from "../lib/armarPrompts.js";
 
 
 
@@ -50,10 +50,10 @@ async function enviarMensaje() {
   const mensajeDelUsuario = mensajeInput.value.trim();
   if (!mensajeDelUsuario) return;
 
-  const contexto = await generarContexto(mensajeDelUsuario);
+/*   const contexto = await generarContexto(mensajeDelUsuario);
   const promptUsuario = generarPromptUsuario(contexto, mensajeDelUsuario);
   const promptSistema = generarPromptSistema("asistente virtual");
-
+ */
 
   agregarMensaje("usuario", mensajeDelUsuario);
   mensajeInput.value = "";
@@ -61,7 +61,7 @@ async function enviarMensaje() {
   // ⏳ Mostrar animación mientras llega la respuesta
   const mensajeLoading = mostrarAnimacionRespondiendo();
 
-  try {
+/*   try {
     // Peticion a mi api server.js
     const res = await fetch("/api/chatbotApi", {
       method: "POST",
@@ -71,7 +71,18 @@ async function enviarMensaje() {
         userPrompt: promptUsuario
       }),
 
+    }); */
+
+     try {
+    // 👉 Los prompts ya vienen armados desde afuera
+    const { systemPrompt, userPrompt } = await obtenerPromptsExternos(mensajeDelUsuario);
+
+    const res = await fetch("/api/chatbotApi", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ systemPrompt, userPrompt })
     });
+
 
     const data = await res.json();
 

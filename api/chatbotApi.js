@@ -2,11 +2,11 @@
 
 import { chequearLimiteOpenRouter } from "../lib/estadoOpenRouter.js";
 import { consultarModeloConOpenRouter } from "../lib/consultasModelos.js";
-
+/* 
 import { generarContexto } from "../lib/extraerContexto.js";
 
 import { promptSistema, generarPromptUsuario } from "../lib/armarPrompts.js";
-
+ */
 
 
 // 🔁 Función serverless que responde peticiones POST con un mensaje del modelo
@@ -23,13 +23,14 @@ export default async function handler(req, res) {
     if (!mensajeDelUsuario || typeof mensajeDelUsuario !== "string" || mensajeDelUsuario.trim().length === 0) {
         return res.status(400).json({ error: "Mensaje inválido o vacío" });
     }
+     const { promptSistema, promptUsuario } = req.body;
 
     
-        const contexto = await generarContexto(mensajeDelUsuario);
+/*         const contexto = await generarContexto(mensajeDelUsuario);
         const promptUsuario = generarPromptUsuario(contexto, mensajeDelUsuario);
 
 
-
+ */
     // 🔐 Validamos si OpenRouter está degradado por exceso de uso
     const estado = await chequearLimiteOpenRouter();
 
