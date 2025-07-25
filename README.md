@@ -1,88 +1,73 @@
-¡Listo, Mauricio! Acá tenés el README actualizado según tu nuevo enfoque, sin iframe y con integración directa desde cualquier frontend externo 💡:
+# 🧠 chatbot-flotante (histórico técnico)
+
+Este repositorio conserva el desarrollo original que dio nacimiento a un ecosistema modular y desacoplado de chatbot IA embebible.
+
+## 🔗 Repositorios actuales del ecosistema
+
+- 🔧 Backend desacoplado (Vercel, API modular): [`chatbot-backend-vercel`](https://github.com/MauricioBelforte/chatbot-backend-vercel)
+- 🎨 Frontend embebible (HTML + JS estático): [`chatbot-frontend-embed`](https://github.com/MauricioBelforte/chatbot-frontend-embed)
 
 ---
 
-# 🤖 chatbot-flotante
+## 🧬 Propósito de este repositorio
 
-Un chatbot modular, auto-hospedado y desacoplado, desarrollado en **Node.js** y desplegado en **Vercel**. Este proyecto refleja un enfoque técnico propio, pensado para escalar de forma independiente, y diseñado para que cualquier frontend externo pueda enviar prompts directamente al motor IA sin depender de componentes visuales embebidos.
+Este repositorio conserva la historia técnica, los commits originales y la evolución del motor de chatbot desde un prototipo personal hacia un sistema desacoplado, plug-and-play y listo para escalar como plantilla open-source.
 
-## 🎯 Propósito
+La intención es dejar trazabilidad completa y servir como caso de estudio para desarrolladores interesados en:
 
-Este chatbot cumple múltiples roles:
-- 🔄 Un backend universal que responde a prompts enviados desde sitios estáticos, dashboards, portfolios o CMS externos.
-- 💼 Una muestra técnica clara para reclutadores y desarrolladores, con foco en modularidad y arquitectura limpia.
-- 🧪 Un experimento open-source para explorar el uso de modelos IA desacoplados.
-- 🎁 Un template liviano para desarrolladores que buscan integrar respuestas por IA sin acoplar lógica contextual.
+- Modularidad progresiva en proyectos IA
+- Estrategias de refactorización hacia desacoplamiento
+- Onboarding técnico claro y replicable
+- Diseño de motores resilientes y mantenibles
 
-## 🧰 Tecnologías utilizadas
+---
 
-- **Node.js**: motor principal del backend.
-- **API desacoplada**: recibe `systemPrompt` y `userPrompt` ya procesados desde el cliente.
-- **OpenRouter, Groq, Ollama**: integración flexible con múltiples proveedores IA.
-- **Vercel Functions**: despliegue serverless y control de rutas con `vercel.json`.
-- **dotenv**: manejo seguro de claves privadas.
+## 🧱 Evolución arquitectónica
 
-## ⚙️ Arquitectura general
+1. 🤖 Monorepo inicial con lógica IA, frontend y backend en una sola base
+2. 🔀 Proceso de refactorización y desacoplamiento
+3. 📦 División en repos separados con onboarding dedicado
+4. 🌐 Ecosistema escalable, embebible y clonable en cualquier entorno
 
-```text
-chatbot-flotante/
-├── public/
-│   ├── index.html          # Interfaz visual del chatbot (opcional)
-│   ├── styles.css          # Estilos visuales
-│   └── chatbotVisual.js    # Script embebible para integración directa
-├── api/
-│   └── chatbotApi.js       # Recibe prompts, responde con modelo IA
-├── lib/
-│   ├── consultasModelos.js
-│   ├── estadoOpenRouter.js
-│   ├── proveedores.js
-│   └── modelosPorProveedor.js
-├── .env                    # Configuraciones privadas
-├── vercel.json             # Deploy y control de rutas
-├── LICENSE                 # Licencia MIT - Mauricio Belforte
-└── README.md               # Esta documentación ✨
-```
+---
 
-## 📡 Cómo integrarlo desde otro proyecto
+## 🛠️ Componentes extraídos
 
-### Consulta directa por API
+Desde este repo se originaron los módulos que hoy viven en repos separados:
 
-```js
-const res = await fetch("https://chatbot-flotante.vercel.app/api/chatbotApi", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    systemPrompt: "Respondé como mentor técnico.",
-    userPrompt: "¿Qué es un stream en JavaScript?"
-  })
-});
-const { respuesta } = await res.json();
-console.log(respuesta);
-```
+- `lib/`: motor IA modular (OpenRouter / Groq / otros)
+- `api/`: rutas backend desacopladas
+- `public/`: frontend embebido ahora en su propio repo
 
-> 💬 Este backend espera prompts ya armados: no interpreta el mensaje del usuario ni genera contexto. El frontend se encarga de eso.
+---
 
-## 📄 Formato esperado del cuerpo del request
+## 📘 Uso sugerido
 
-```json
-{
-  "systemPrompt": "Definí el rol del asistente",
-  "userPrompt": "Mensaje del usuario"
-}
-```
+Este repo se mantiene para fines didácticos y de trazabilidad:
 
-## 🧪 Sobre el modelo desacoplado
+- Explorar commits originales
+- Analizar estrategias de desacoplamiento
+- Estudiar la evolución técnica del chatbot
 
-- El backend es neutro y reusable: puede integrarse con cualquier cliente, visual o no.
-- El frontend externo controla el tono, el contenido y el flujo conversacional.
-- El motor IA se gestiona desde `lib/`, con fallback automático y selección de proveedor.
+---
+
+## 🧪 Cómo probar el sistema completo
+
+1. Backend: desplegar [`chatbot-backend-vercel`](https://github.com/MauricioBelforte/chatbot-backend-vercel) en Vercel
+2. Frontend: clonar [`chatbot-frontend-embed`](https://github.com/MauricioBelforte/chatbot-frontend-embed) y vincularlo al endpoint
+3. Configurar `.env` (backend) y `script.js` (frontend) según tu instancia
+
+---
+
+## 📖 Lecciones aprendidas
+
+- La modularidad y claridad de responsabilidad hacen escalable el sistema
+- El onboarding técnico es tan importante como el código
+- Mantener la historia del proyecto permite dejar legado y aprendizaje
+
+---
 
 ## 📄 Licencia
 
-Este proyecto está bajo la licencia **MIT**. Podés usarlo, modificarlo y distribuirlo libremente, siempre que se conserve el siguiente aviso:
-
-Consulta el archivo [`LICENSE`](./LICENSE) para ver el texto completo.
-
----
-
-Si querés, armamos una variante de este README para el backend puro (`chatbot-backend-vercel`) o un ejemplo embebido tipo `docs/index.html` que haga el `fetch()` directamente. Vos decís cómo seguimos 🔧📦.
+Este repositorio está bajo la licencia MIT.  
+Consultá el archivo [`LICENSE`](./LICENSE) para más detalles.
