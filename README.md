@@ -1,17 +1,23 @@
-# 🧠 chatbot-flotante (histórico técnico)
+
+# 🧠 chatbot-flotante-historial (cápsula técnica)
 
 Este repositorio conserva el desarrollo original que dio nacimiento a un ecosistema modular y desacoplado de chatbot IA embebible.
 
+> 🗓️ *Renombrado el 28/07/2025 como parte del cierre técnico del módulo original.*
+> 🔐 *GitHub Pages y despliegues en Vercel fueron desactivados para preservar este repositorio como cápsula de historial y legado técnico.*
+
+---
+
 ## 🔗 Repositorios actuales del ecosistema
 
-- 🔧 Backend desacoplado (Vercel, API modular): [`chatbot-backend-vercel`](https://github.com/MauricioBelforte/chatbot-backend-vercel)
-- 🎨 Frontend embebible (HTML + JS estático): [`chatbot-frontend-embed`](https://github.com/MauricioBelforte/chatbot-frontend-embed)
+- 🔧 Backend desacoplado (Vercel, API modular): `chatbot-backend-vercel`
+- 🎨 Frontend embebible (HTML + JS estático): `chatbot-frontend-embed`
 
 ---
 
 ## 🧬 Propósito de este repositorio
 
-Este repositorio conserva la historia técnica, los commits originales y la evolución del motor de chatbot desde un prototipo personal hacia un sistema desacoplado, plug-and-play y listo para escalar como plantilla open-source.
+Este repositorio ya no está activo como sistema funcional, pero conserva los commits y la arquitectura inicial que dieron origen a un sistema desacoplado, plug-and-play y listo para escalar como plantilla open-source.
 
 La intención es dejar trazabilidad completa y servir como caso de estudio para desarrolladores interesados en:
 
@@ -24,10 +30,10 @@ La intención es dejar trazabilidad completa y servir como caso de estudio para 
 
 ## 🧱 Evolución arquitectónica
 
-1. 🤖 Monorepo inicial con lógica IA, frontend y backend en una sola base
-2. 🔀 Proceso de refactorización y desacoplamiento
-3. 📦 División en repos separados con onboarding dedicado
-4. 🌐 Ecosistema escalable, embebible y clonable en cualquier entorno
+- 🤖 Monorepo inicial con lógica IA, frontend y backend en una sola base
+- 🔀 Proceso de refactorización y desacoplamiento
+- 📦 División en repos separados con onboarding dedicado
+- 🌐 Ecosistema escalable, embebible y clonable en cualquier entorno
 
 ---
 
@@ -53,9 +59,11 @@ Este repo se mantiene para fines didácticos y de trazabilidad:
 
 ## 🧪 Cómo probar el sistema completo
 
-1. Backend: desplegar [`chatbot-backend-vercel`](https://github.com/MauricioBelforte/chatbot-backend-vercel) en Vercel
-2. Frontend: clonar [`chatbot-frontend-embed`](https://github.com/MauricioBelforte/chatbot-frontend-embed) y vincularlo al endpoint
-3. Configurar `.env` (backend) y `script.js` (frontend) según tu instancia
+> ⚠️ Este repositorio ya no está funcional como sistema vivo, pero se puede estudiar la integración a partir de sus módulos activos:
+
+- Backend: desplegar `chatbot-backend-vercel` en Vercel
+- Frontend: clonar `chatbot-frontend-embed` y vincularlo al endpoint
+- Configurar `.env` (backend) y `script.js` (frontend) según tu instancia
 
 ---
 
@@ -70,4 +78,6 @@ Este repo se mantiene para fines didácticos y de trazabilidad:
 ## 📄 Licencia
 
 Este repositorio está bajo la licencia MIT.  
-Consultá el archivo [`LICENSE`](./LICENSE) para más detalles.
+Consultá el archivo `LICENSE` para más detalles.
+
+---
